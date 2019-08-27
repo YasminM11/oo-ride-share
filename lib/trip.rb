@@ -32,7 +32,8 @@ module RideShare
         raise ArgumentError.new("Invalid rating #{@rating}")
       end
     end
-    
+
+  
     
     def duration
       if @end_time < @start_time
