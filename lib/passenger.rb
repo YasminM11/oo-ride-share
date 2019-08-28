@@ -33,7 +33,7 @@ module RideShare
        total += spend_time
      end
      return total
-   end
+    end
 
     private
 
