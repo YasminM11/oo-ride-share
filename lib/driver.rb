@@ -5,17 +5,17 @@ module RideShare
     attr_reader :id, :name, :vin, :status, :trips
     
     def initialize(id:, name:, vin:, status: :AVAILABLE, trips: [ ])
-      super(id)
+      super(id.to_i)
       
-      @name = name
+      @name = name.to_s
       if vin.length == 17 
-        @vin = vin
+        @vin = vin.to_s
       else 
         raise ArgumentError.new("Incorrect VIN length")
       end
       
       if [:AVAILABLE, :UNAVAILABLE].include?(status) == true 
-        @status = status
+        @status = status.to_sym
       else 
         raise ArgumentError.new("Invalid status")
       end

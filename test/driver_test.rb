@@ -33,7 +33,7 @@ describe "Driver class" do
       expect(@driver.trips.length).must_equal 0
     end
     
-    xit "is set up for specific attributes and data types" do
+    it "is set up for specific attributes and data types" do
       [:id, :name, :vin, :status, :trips].each do |prop|
         expect(@driver).must_respond_to prop
       end
