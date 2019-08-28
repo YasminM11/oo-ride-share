@@ -15,7 +15,7 @@ module RideShare
       end
       
       @status = status.to_sym
-      unless [:AVAILABLE, :UNAVAILABLE].include?(@status) 
+      unless [:AVAILABLE, :UNAVAILABLE, "AVAILABLE", "UNAVAILABLE"].include?(@status) 
         raise ArgumentError.new("Invalid Driver Status")
       end
       @trips = trips 
