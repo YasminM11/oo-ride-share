@@ -5,11 +5,11 @@ require_relative 'csv_record'
 
 module RideShare
   class Trip < CsvRecord
-    attr_reader :id, :passenger, :passenger_id, :start_time, :end_time, :cost, :rating, :total, :driver_id, :driver
+    attr_reader :id, :passenger, :passenger_id, :start_time, :end_time, :cost, :rating, :total, :driver, :driver_id
     
     def initialize(id:,
       passenger: nil, passenger_id: nil,
-      start_time:, end_time:, cost: nil, rating:, driver_id:, driver:) #driver:we may delete (driver:) 
+      start_time:, end_time:, cost: nil, rating:, driver: nil, driver_id: nil) #driver:we may delete (driver:) 
       super(id)
       
       if passenger
@@ -31,7 +31,7 @@ module RideShare
       if @rating > 5 || @rating < 1
         raise ArgumentError.new("Invalid rating #{@rating}")
       end
-
+      
       if driver
         @driver = driver
         @driver_id = driver_id
@@ -59,9 +59,11 @@ module RideShare
       "PassengerID=#{passenger&.id.inspect}>"
     end
     
-    def connect(passenger)
+    def connect(driver, passenger)
       @passenger = passenger
       passenger.add_trip(self)
+      @driver = driver
+      driver.add_trip(self)
     end
     
     private
