@@ -1,5 +1,6 @@
 require 'csv'
 require 'time'
+require 'pry'
 require_relative 'driver'
 require_relative 'passenger'
 require_relative 'trip'
@@ -32,6 +33,32 @@ module RideShare
       #{drivers.count} drivers, \
       #{passengers.count} passengers>"
     end
+    
+    def request_trip(passenger_id)
+      driver = @drivers.find { |driver| driver.status == :AVAIL ABLE }
+      
+      
+      # @drivers.each do |driver|
+      #   if driver.status == "AVAILABLE"
+      #     driver = driver.id
+      #     break
+      #   end
+      # end
+      trip_data = {
+        id: @trips.length + 1,
+        passenger_id: passenger_id,
+        start_time: Time.now,
+        end_time: nil,
+        cost: nil,
+        rating: nil,
+        driver_id: driver
+      }
+      trip = RideShare::Trip.new(trip_data)
+      return trip
+    end
+    
+    
+    
     
     private
     

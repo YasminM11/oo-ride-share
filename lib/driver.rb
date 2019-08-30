@@ -5,7 +5,7 @@ module RideShare
     attr_reader :id, :name, :vin, :status, :trips
     
     def initialize(id:, name:, vin:, status: :AVAILABLE, trips: [])
-      super(id.to_i)
+      super(id)
       
       @name = name.to_s
       if vin.length == 17 

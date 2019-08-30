@@ -24,7 +24,7 @@ describe "TripDispatcher class" do
       
       expect(dispatcher.trips).must_be_kind_of Array
       expect(dispatcher.passengers).must_be_kind_of Array
-      # expect(dispatcher.drivers).must_be_kind_of Array
+      expect(dispatcher.drivers).must_be_kind_of Array
     end
     
     it "loads the development data by default" do
@@ -121,6 +121,29 @@ describe "TripDispatcher class" do
           expect(trip.driver.trips).must_include trip
         end
       end
+    end
+  end
+  
+  describe "Trip creation" do
+    before do
+      # start_time = Time.now
+      # end_time = nil
+      
+      # @trip_data = {
+      #   id: nil,
+      #   passenger_id: 1,
+      #   start_time: start_time,
+      #   end_time: end_time,
+      #   cost: nil,
+      #   rating: nil,
+      #   driver: nil
+      # }
+      @passenger_id = 1
+    end
+    
+    it "creates correctly a trip" do
+      dispatcher = RideShare::TripDispatcher.new
+      expect dispatcher.request_trip(@passenger_id).must_be_kind_of RideShare::Trip 
     end
   end
 end
