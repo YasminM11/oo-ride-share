@@ -25,7 +25,6 @@ module RideShare
      return total
    end
   
-   #added by me
    def total_time_spent
      total = 0
      @trips.each do |trip|
@@ -35,7 +34,7 @@ module RideShare
      return total
    end
 
-    private
+  private
 
     def self.from_csv(record)
       return new(

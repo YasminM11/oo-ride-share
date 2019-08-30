@@ -13,6 +13,7 @@ module RideShare
       @passengers = Passenger.load_all(directory: directory)
       @trips = Trip.load_all(directory: directory)
       @drivers = Driver.load_all(directory: directory)
+      
       connect_trips
     end
     
@@ -27,7 +28,6 @@ module RideShare
     end
     
     def inspect
-      # Make puts output more useful
       return "#<#{self.class.name}:0x#{object_id.to_s(16)} \
       #{trips.count} trips, \
       #{drivers.count} drivers, \
@@ -35,14 +35,16 @@ module RideShare
     end
     
     def request_trip(passenger_id)
-      # driver = @drivers.find { |driver| driver.status == :AVAILABLE }
       current_driver = nil
-
+      
+      
       @drivers.each do |driver|
         if driver.status == :AVAILABLE
           current_driver = driver.id
           driver.status = :UNAVAILABLE
           break
+        else
+          raise ArgumentError.new("No Drivers Available")
         end
       end
       
@@ -56,13 +58,10 @@ module RideShare
         driver_id: current_driver
       }
       trip = RideShare::Trip.new(trip_data)
-
+      
       @trips << trip 
       return trip
     end
-    
-    
-    
     
     private
     
@@ -73,7 +72,7 @@ module RideShare
         trip.connect(driver, passenger)
       end
       
-      return trips #added the @ symbol, passed tests
+      return trips 
     end
   end
 end

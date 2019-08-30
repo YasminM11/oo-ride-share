@@ -79,7 +79,6 @@ describe "TripDispatcher class" do
     end
   end
   
-  # TODO: un-skip for Wave 2
   describe "drivers" do
     describe "find_driver method" do
       before do
@@ -126,18 +125,6 @@ describe "TripDispatcher class" do
   
   describe "Trip creation" do
     before do
-      # start_time = Time.now
-      # end_time = nil
-      
-      # @trip_data = {
-      #   id: nil,
-      #   passenger_id: 1,
-      #   start_time: start_time,
-      #   end_time: end_time,
-      #   cost: nil,
-      #   rating: nil,
-      #   driver: nil
-      # }
       @passenger_id = 1
     end
     
@@ -145,12 +132,86 @@ describe "TripDispatcher class" do
       dispatcher = RideShare::TripDispatcher.new
       expect dispatcher.request_trip(@passenger_id).must_be_kind_of RideShare::Trip 
     end
-
+    
     it "creates correctly adds a trip" do
       dispatcher = RideShare::TripDispatcher.new
       total_trips = dispatcher.trips.count
       dispatcher.request_trip(@passenger_id)
-      expect dispatcher.trips.count.must_equal (total_trips + 1) 
+      expect dispatcher.trips.count.must_equal(total_trips + 1) 
+    end
+    
+    it "creates correctly adds a trip for the passenger" do
+      count = 0
+      dispatcher = RideShare::TripDispatcher.new
+      #Calculate Number of Trips Previous to Adding
+      dispatcher.trips.each do |passenger|
+        if passenger.passenger_id == @passenger_id
+          count += 1
+        end
+      end
+      #Add New Trip
+      dispatcher.request_trip(@passenger_id)
+      #Calculate Number of Trips After Adding
+      count2 = 0
+      dispatcher.trips.each do |passenger|
+        if passenger.passenger_id == @passenger_id
+          count2 += 1
+        end
+      end
+      expect count2.must_equal(count + 1) 
+    end
+    
+    it "creates correctly adds a trip for the driver" do
+      @driver_id = 1
+      count = 0
+      #Number of Trips Previous to Adding
+      dispatcher = RideShare::TripDispatcher.new
+      dispatcher.trips.each do |trip|
+        if trip.driver_id == @driver_id
+          count += 1
+        end
+      end
+      #Add New Trip
+      dispatcher.request_trip(@passenger_id)
+      
+      #Number of Trips After Adding
+      count2 = 0
+      dispatcher.trips.each do |trip|
+        if trip.driver_id == @driver_id
+          count2 += 1
+        end
+      end
+      expect count2.must_equal(count + 1) 
+    end
+    it "Selects First Available Driver" do
+      available_driver = nil
+      dispatcher = RideShare::TripDispatcher.new
+      #Finds Available Driver Before Adding Trip
+      dispatcher.drivers.each do |driver|
+        if driver.status == :AVAILABLE
+          available_driver = driver.id
+          break
+        end
+      end
+      #Add Trip
+      dispatcher.request_trip(@passenger_id)
+      #Confirms that Drivers Match from Newest Trip
+      current_driver = dispatcher.trips.last
+      current_driver = current_driver.driver_id
+      expect available_driver.must_equal(current_driver) 
+    end
+    
+    it "Raises Error when No Available Drivers" do
+      unavailable_driver = nil
+      dispatcher2 = RideShare::TripDispatcher.new
+      dispatcher2.drivers.each do |driver|
+        if driver.status == :AVAILABLE
+          dispatcher2.delete(driver)
+        end
+      end
+      
+      request_trip = dispatcher2.request_trip(@passenger_id)
+      expect request_trip.must_raise ArgumentError
     end
   end
 end
