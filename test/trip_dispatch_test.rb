@@ -141,9 +141,16 @@ describe "TripDispatcher class" do
       @passenger_id = 1
     end
     
-    it "creates correctly a trip" do
+    it "creates correctly a makes trip" do
       dispatcher = RideShare::TripDispatcher.new
       expect dispatcher.request_trip(@passenger_id).must_be_kind_of RideShare::Trip 
+    end
+
+    it "creates correctly adds a trip" do
+      dispatcher = RideShare::TripDispatcher.new
+      total_trips = dispatcher.trips.count
+      dispatcher.request_trip(@passenger_id)
+      expect dispatcher.trips.count.must_equal (total_trips + 1) 
     end
   end
 end
